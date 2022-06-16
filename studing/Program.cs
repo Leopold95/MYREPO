@@ -1,256 +1,253 @@
 ﻿
 Console.WriteLine("Hello Word!!!");
 
-Worker myWorkerDefault = new Worker();
-Worker myWorkerInited = new Worker(96, "name");
+Worker MyWorker = new Worker(30);
+MyWorker.PrintStudents();
 
-myWorkerDefault.PrintData();
-
-int requareMaxInt = 1;
-Console.WriteLine($"Is '{myWorkerDefault}' list have values maxer '{requareMaxInt}': {myWorkerDefault.IsSomeMaxerOf(requareMaxInt)}");
-
-BaseContainer requareMaxCont = new Cat();
-Console.WriteLine($"Is '{myWorkerDefault}' list have values maxer '{requareMaxCont}': {myWorkerDefault.IsSomeMaxerOf(requareMaxCont)}");
-
-Console.WriteLine("refilling data");
-List<BaseContainer> container = new();
-myWorkerDefault.ReFillData(11, "newData", container);
-
-myWorkerDefault.PrintData();
-
-Console.WriteLine("rendomig data");
-myWorkerDefault.RandomData();
-
-myWorkerDefault.PrintData();
-
-Console.WriteLine($"Ages sum is: {myWorkerDefault.GetAgesSum()}");
-
-abstract class BaseContainer
+class Worker
 {
-    public string? Name = "empty";
-    public int Age = -1;
+    private List<Student> _students;
 
-    protected void SetAge(int age)
+    public Worker(int studentsCount)
     {
-        Age = age;
+        _students = new();
+
+        for (int i = 0; i < studentsCount; i++)
+            _students.Add(Student.GenerateRandom());
+        
     }
 
-    public static bool operator >(BaseContainer b1, BaseContainer b2) { return b1.Age > b2.Age; }
-    public static bool operator <(BaseContainer b1, BaseContainer b2) { return b1.Age < b2.Age; }
+    public void SortStudents()
+    {
+        var sorted = from student in _students
+                     orderby student.Name, student.Age
+                     select student;
 
-    //protected только для наследников
+        _students = sorted.ToList();
+    }
+
+    public Student FoundByName(string name)
+    {
+        foreach (var item in _students)
+            if (item.Name == name)
+                return item;
+
+        return new Student();
+    }
+
+    public Student FoundBySurname(string surename)
+    {
+        foreach (var item in _students)
+            if (item.Name == surename)
+                return item;
+
+        return new Student();
+    }
+
+    public Student FoundByAge(int age)
+    {
+        foreach (var item in _students)
+            if (item.Age == age)
+                return item;
+
+        return new Student();
+    }
+
+    public int ContSerBal(int group)
+    {
+        List<Student> _newStudents = new();
+        int serbalValue = 0;
+        int serbalCount = 0;
+
+        foreach (var item in _students)
+            if (item.Group == group)
+            {
+                _newStudents.Add(item);
+                serbalCount++;
+                serbalValue += item.SerBal;
+            }
+
+        //возвращает посчитанный средний бал
+        return serbalValue / serbalCount;
+    }
+
+    public void PrintStudents()
+    {    
+        foreach (var item in _students)
+            item.PrintConsole();
+    }
+
+    public void KeyboardStudents()
+    {
+        foreach (var item in _students)
+            item.FillKeybpard();
+    }
+
+    public Student FoundMinAge()
+    {
+        int min = int.MinValue;
+
+        foreach (var item in _students)
+        {
+            if (item.Age > min)
+                min = item.Age;
+        }
+
+        foreach (var item in _students)
+            if (item.Age == min)
+                return item;
+
+        return new Student();
+    }
+
+    public void CountMaleFemale()
+    {
+        int male = 0;
+        int female = 0;
+
+        foreach (var item in _students)
+        {
+            if (item.State is Male)
+                male++;
+            else
+                female++;
+        }
+    }
 }
 
-sealed class Empty : BaseContainer
-{
-    public static bool operator >(Empty b1, Empty b2) { return b1.Age > b2.Age; }
-    public static bool operator <(Empty b1, Empty b2) { return b1.Age < b2.Age; }
 
-    public Empty() { }
-    public Empty(int age, string name)
+class Student
+{
+    public string? Name;
+    public string? Surename;
+    public int Age;
+    public DateTime BornTime;
+    public State? State;
+    public int Group;
+    public int SerBal;
+
+    public Student()
     {
-        Age = age;
+        Name = "name";
+        Surename = "surname";
+        Age = 0;
+        BornTime = DateTime.Now;
+        State = new Male();
+        Group = 0;
+        SerBal = 0;
+    }
+
+    public Student(string name, string surname, int age, DateTime time, State state, int group, int serbal)
+    {
         Name = name;
-    }
-}
-
-sealed class Cat : BaseContainer
-{
-    public static bool operator >(Cat b1, Cat b2) { return b1.Age > b2.Age; }
-    public static bool operator <(Cat b1, Cat b2) { return b1.Age < b2.Age; }
-
-    public Cat() { }
-    public Cat(int age, string name)
-    {
+        Surename = surname;
         Age = age;
-        Name = name;
-    }
-}
-
-sealed class Dog : BaseContainer
-{
-    public static bool operator >(Dog b1, Dog b2) { return b1.Age > b2.Age; }
-    public static bool operator <(Dog b1, Dog b2) { return b1.Age < b2.Age; }
-
-    public Dog() { }
-    public Dog(int age, string name)
-    {
-        Age = age;
-        Name = name;
-    }
-}
-
-sealed class Worker
-{
-    public float Value { get; }
-
-    private int _valueOfSothing;
-    private string _nameOfSomthing;
-
-    private List<BaseContainer> _listOfSomthing;
-
-    #region Constuctors
-    public Worker()
-    {
-        //init default
-        _valueOfSothing =  69;
-        _nameOfSomthing = "69";
-
-        _listOfSomthing = new List<BaseContainer>();
-
-        _listOfSomthing.Add(new Cat());
-        _listOfSomthing.Add(new Cat(50, "name"));
-        _listOfSomthing.Add(new Dog());
-        _listOfSomthing.Add(new Dog(69, "name"));        
+        BornTime = time;
+        State = state;
+        Group = group;
+        SerBal = serbal;
     }
 
-    public Worker(int value, string name)
+    public static Student GenerateRandom()
     {
-        _valueOfSothing = value;
-        _nameOfSomthing = name;
-
-        _listOfSomthing = new List<BaseContainer>();
-    }
-
-    public Worker(int value, string name, List<BaseContainer> cont1)
-    {
-        _valueOfSothing = value;
-        _nameOfSomthing = name;
-
-        _listOfSomthing = cont1;
-    }
-    #endregion
-
-    public void PrintData()
-    {
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine("<----------------------------------->");
-        Console.WriteLine($"| Name of some field: {_nameOfSomthing}");
-        Console.WriteLine($"| Value of some field: {_valueOfSothing}");
-        Console.WriteLine();
-
-        foreach (var item in _listOfSomthing)
-            Console.WriteLine($"| Type: {item}. Name: {item.Name}. Age: {item.Age}");
-
-        Console.WriteLine("<____________________________________>");
-        Console.WriteLine();
-        Console.WriteLine();
-    }
-
-    public void ReFillData(int value, string name, List<BaseContainer> cont1)
-    {
-        _valueOfSothing = value;
-        _nameOfSomthing = name;
-
-        _listOfSomthing = cont1;
-    }
-
-    public void RandomData()
-    {
+        Student student = new Student();
         Random rand = new Random();
 
-        _valueOfSothing = rand.Next(0, int.MaxValue);
-        _nameOfSomthing = Convert.ToString(rand.Next(0, int.MaxValue));
+        student.Name = RandomName();
+        student.Surename = RandomSurename();
+        student.Age = rand.Next(16, 35);
 
-        for (int i = 0; i < rand.Next(0, 10); i++)
-        {
-            _listOfSomthing.Add(
-                new Empty(
-                    rand.Next(0, int.MaxValue),
-                    Convert.ToString(rand.Next(0, int.MaxValue))
-                ));
-        }
+        int year = rand.Next(1988, 2010);
+        int month = rand.Next(1, 12);
+        int day = rand.Next(1, 30);
+
+        student.BornTime = new DateTime(year, month, day);
+
+        student.State = RandomState();
+        student.Group = rand.Next(0, 10);
+        student.SerBal = rand.Next(40, 100);
+
+        return student;
     }
 
-    public void KeyboardData()
+    public void FillKeybpard()
     {
-        Random rand = new Random();
+        Name = Console.ReadLine();
+        Surename = Console.ReadLine();
+        Age = Convert.ToInt32(Console.ReadLine());
 
-        Console.WriteLine("Enter valueOfSothing");
-        _valueOfSothing = Convert.ToInt32(Console.ReadLine());
+        int year = Convert.ToInt32(Console.ReadLine());
+        int month = Convert.ToInt32(Console.ReadLine());
+        int day = Convert.ToInt32(Console.ReadLine());
 
-        Console.WriteLine("Enter nameOfSomthing");
-        _nameOfSomthing = Console.ReadLine();
+        BornTime = new DateTime(year, month, day);
 
-        foreach (var item in _listOfSomthing)
-        {
-            Console.WriteLine("Enter age of smt");
-            item.Age = Convert.ToInt32(Console.ReadLine());
-
-            Console.WriteLine("Enter name of smt");
-            item.Name = Console.ReadLine();
-        }
+        State = new Male();
+        Group = Convert.ToInt32(Console.ReadLine());
+        SerBal = Convert.ToInt32(Console.ReadLine());
     }
 
-    public bool IsSomeMaxerOf(int requaredAge)
+    public void PrintConsole()
     {
-        BaseContainer newMax = new Empty();
-
-        foreach (var item in _listOfSomthing)
-        {
-            if (item.Age > requaredAge)
-            {
-                return true;
-            }
-        }
-
-        return false;
+        Console.WriteLine(Name);
+        Console.WriteLine(Surename);
+        Console.WriteLine(Age);
+        Console.WriteLine(BornTime);
+        Console.WriteLine(State);
+        Console.WriteLine(SerBal);
     }
 
-    public bool IsSomeMaxerOf(BaseContainer requaredAge)
+    private static string RandomName()
     {
-        foreach (var item in _listOfSomthing)
-        {
-            if (item > requaredAge)
-            {
-                return true;
-            }
-        }
+        Random randomiser = new();
+        string[] names = { "NameOne", "NameTwo" };
 
-        return false;
+        int rand = randomiser.Next(0, names.Length);
+
+        return names[rand];
     }
 
-    public BaseContainer GetMax()
+    private static string RandomSurename()
     {
-        int max = int.MinValue;
+        Random randomiser = new();
+        string[] names = { "SureNameOne", "SurenameTwo" };
 
-        foreach (var item in _listOfSomthing)
-        {
-            if (max > item.Age)
-                item.Age = max;
-        }
+        int rand = randomiser.Next(0, names.Length);
 
-        foreach (var item in _listOfSomthing)
-        {
-            if (item.Age == max)
-                return item;
-        }
-
-        return new Empty();
+        return names[rand];
     }
 
-    public BaseContainer GetSomething(int age, string name)
+    private static State RandomState()
     {
-        foreach (var item in _listOfSomthing)
-        {
-            if(item.Age == age && item.Name == name)
-            {
-                return item;
-            }
-        }
+        Random r = new();
 
-        return new Empty();
-    }
-
-    public int GetAgesSum()
-    {
-        int i = 0;
-
-        foreach (var item in _listOfSomthing)
-            i += item.Age;
-
-        return i;
+        if (r.Next(0, 1) == 1)
+            return new Male();
+        else
+            return new Female();
     }
 }
+
+interface State
+{
+    State GetState();
+}
+
+class Male : State
+{
+    public State GetState()
+    {
+        return new Male();
+    }
+}
+
+class Female : State
+{
+    public State GetState()
+    {
+        return new Female();
+    }
+}
+
+
 
