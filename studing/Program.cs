@@ -1,7 +1,7 @@
 ﻿
 Console.WriteLine("Hello Word!!!");
 
-Worker MyWorker = new Worker(3);
+Worker MyWorker = new Worker(30);
 //Console.WriteLine(MyWorker.ContSerBal(9));
 
 //Student min = MyWorker.FoundMinAge();
@@ -13,7 +13,9 @@ Worker MyWorker = new Worker(3);
 //Console.WriteLine();
 //MyWorker.PrintStudents();
 
-Console.WriteLine(MyWorker.FountMinAgeInStudents());
+//Console.WriteLine(MyWorker.FountMinAgeInStudents());
+
+MyWorker.CountMaleFemale();
 
 class Worker
 {
@@ -151,6 +153,9 @@ class Worker
             else
                 female++;
         }
+
+        Console.WriteLine($"Males: {male}");
+        Console.WriteLine($"Females: {female}");
     }
 }
 
@@ -197,8 +202,8 @@ class Student
         student.Age = rand.Next(16, 35);
 
         int year = rand.Next(1988, 2010);
-        int month = rand.Next(1, 12);
-        int day = rand.Next(1, 30);
+        int month = rand.Next(1, 11);
+        int day = rand.Next(1, 29);
 
         student.BornTime = new DateTime(year, month, day);
 
@@ -259,10 +264,10 @@ class Student
     private static State RandomState()
     {
         Random r = new();
-
-        if (r.Next(0, 1) == 1)
+        int i = r.Next(-1, 2);
+        if (i == 1)
             return new Male();
-        else
+        else 
             return new Female();
     }
 }
