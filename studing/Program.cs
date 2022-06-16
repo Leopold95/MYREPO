@@ -1,9 +1,17 @@
 ﻿
 Console.WriteLine("Hello Word!!!");
 
-Worker MyWorker = new Worker(30);
-Console.WriteLine(MyWorker.ContSerBal(9));
+Worker MyWorker = new Worker(3);
+//Console.WriteLine(MyWorker.ContSerBal(9));
 
+//Student min = MyWorker.FoundMinAge();
+//min.PrintConsole();
+
+MyWorker.PrintStudents();
+MyWorker.SortStudentsByNameAndSurname();
+Console.WriteLine();
+Console.WriteLine();
+MyWorker.PrintStudents();
 
 class Worker
 {
@@ -18,7 +26,7 @@ class Worker
         
     }
 
-    public void SortStudents()
+    public void SortStudentsByNameAndSurname()
     {
         var sorted = from student in _students
                      orderby student.Name, student.Age
@@ -71,7 +79,7 @@ class Worker
 
         if (serbalCount == 0)
         {
-            Console.WriteLine("не найденкуо ниодного студенты заданной группы");
+            Console.WriteLine($"не найденно ниодного студента заданной ({group}) группы");
             return -1;
         }
 
@@ -94,13 +102,23 @@ class Worker
     public Student FoundMinAge()
     {
         int min = int.MinValue;
+        int both = 0;
 
+        //comparing students
         foreach (var item in _students)
         {
             if (item.Age > min)
+            {
                 min = item.Age;
+                continue;
+            }
+            else if (item.Age == min)
+                both++;
         }
 
+        Console.WriteLine($"Студентов с одним возростom: {both}");
+
+        //hetting student
         foreach (var item in _students)
             if (item.Age == min)
                 return item;
