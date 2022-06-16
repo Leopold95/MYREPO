@@ -7,11 +7,13 @@ Worker MyWorker = new Worker(3);
 //Student min = MyWorker.FoundMinAge();
 //min.PrintConsole();
 
-MyWorker.PrintStudents();
-MyWorker.SortStudentsByNameAndSurname();
-Console.WriteLine();
-Console.WriteLine();
-MyWorker.PrintStudents();
+//MyWorker.PrintStudents();
+//MyWorker.SortStudentsByNameAndSurname();
+//Console.WriteLine();
+//Console.WriteLine();
+//MyWorker.PrintStudents();
+
+Console.WriteLine(MyWorker.FountMinAgeInStudents());
 
 class Worker
 {
@@ -99,15 +101,15 @@ class Worker
             item.FillKeybpard();
     }
 
-    public Student FoundMinAge()
+    public Student FoundStudentWithMinAge()
     {
-        int min = int.MinValue;
+        int min = _students[0].Age;
         int both = 0;
 
         //comparing students
         foreach (var item in _students)
         {
-            if (item.Age > min)
+            if (item.Age < min)
             {
                 min = item.Age;
                 continue;
@@ -124,6 +126,17 @@ class Worker
                 return item;
 
         return new Student();
+    }
+
+    public int FountMinAgeInStudents()
+    {
+        int min = _students[0].Age;
+
+        foreach (var item in _students)
+            if (item.Age < min)
+                min = item.Age;
+
+        return min;
     }
 
     public void CountMaleFemale()
