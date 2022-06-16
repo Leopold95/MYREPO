@@ -2,7 +2,8 @@
 Console.WriteLine("Hello Word!!!");
 
 Worker MyWorker = new Worker(30);
-MyWorker.PrintStudents();
+Console.WriteLine(MyWorker.ContSerBal(9));
+
 
 class Worker
 {
@@ -66,6 +67,13 @@ class Worker
                 serbalCount++;
                 serbalValue += item.SerBal;
             }
+
+
+        if (serbalCount == 0)
+        {
+            Console.WriteLine("не найденкуо ниодного студенты заданной группы");
+            return -1;
+        }
 
         //возвращает посчитанный средний бал
         return serbalValue / serbalCount;
