@@ -233,12 +233,10 @@ class Student
 
     public void PrintConsole()
     {
-        Console.WriteLine(Name);
-        Console.WriteLine(Surename);
-        Console.WriteLine(Age);
-        Console.WriteLine(BornTime);
-        Console.WriteLine(State);
-        Console.WriteLine(SerBal);
+        Console.WriteLine($"Имя: {Name} Фамилия: {Surename} Возраст: {Age}");
+        Console.WriteLine($"Дата рождения: {BornTime}");
+        Console.WriteLine($"Поль: {State}");
+        Console.WriteLine($"Средний балл {SerBal}");
     }
 
     private static string RandomName()
