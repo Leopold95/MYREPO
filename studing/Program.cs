@@ -7,7 +7,7 @@ Worker MyWorker = new Worker(30);
 //Student min = MyWorker.FoundMinAge();
 //min.PrintConsole();
 
-//MyWorker.PrintStudents();
+MyWorker.PrintStudents();
 //MyWorker.SortStudentsByNameAndSurname();
 //Console.WriteLine();
 //Console.WriteLine();
@@ -235,7 +235,7 @@ class Student
     {
         Console.WriteLine($"Имя: {Name} Фамилия: {Surename} Возраст: {Age}");
         Console.WriteLine($"Дата рождения: {BornTime}");
-        Console.WriteLine($"Поль: {State}");
+        Console.WriteLine($"Пол: {State}");
         Console.WriteLine($"Средний балл {SerBal}");
     }
 
